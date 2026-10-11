@@ -1,4 +1,6 @@
+from __future__ import annotations
 from pathlib import Path
+from typing import Optional
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -9,12 +11,12 @@ class Settings(BaseSettings):
     )
     app_env: str = "development"
     database_url: str = "sqlite:///./incidentpilot.db"
-    sarvam_api_key: str | None = None
+    sarvam_api_key: Optional[str] = None
     sarvam_model: str = "sarvam-105b"
     sarvam_base_url: str = "https://api.sarvam.ai"
     agent_max_steps: int = 5
     approval_ttl_minutes: int = 30
-    operator_token: str | None = None
+    operator_token: Optional[str] = None
 
 
 settings = Settings()

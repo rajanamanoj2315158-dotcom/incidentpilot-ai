@@ -1,6 +1,8 @@
+from __future__ import annotations
 import json
 import sqlite3
 from pathlib import Path
+from typing import Optional
 from .schemas import Incident
 
 
@@ -22,7 +24,7 @@ class Store:
         with self._connect() as db:
             db.execute("INSERT OR REPLACE INTO incidents VALUES (?,?)", (incident.id, incident.model_dump_json()))
 
-    def get_incident(self, incident_id: str) -> Incident | None:
+    def get_incident(self, incident_id: str) -> Optional[Incident]:
         with self._connect() as db:
             row = db.execute("SELECT payload FROM incidents WHERE id=?", (incident_id,)).fetchone()
         return Incident.model_validate_json(row[0]) if row else None
@@ -36,7 +38,7 @@ class Store:
         with self._connect() as db:
             db.execute("INSERT INTO approvals VALUES (?,?,?)", (approval["id"], approval["incident_id"], json.dumps(approval, default=str)))
 
-    def get_approval(self, approval_id: str) -> dict | None:
+    def get_approval(self, approval_id: str) -> Optional[dict]:
         with self._connect() as db:
             row = db.execute("SELECT payload FROM approvals WHERE id=?", (approval_id,)).fetchone()
         return json.loads(row[0]) if row else None

@@ -1,16 +1,18 @@
+from __future__ import annotations
 from datetime import datetime
-from enum import StrEnum
+from enum import Enum
+from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class Severity(StrEnum):
+class Severity(str, Enum):
     critical = "critical"
     high = "high"
     medium = "medium"
     low = "low"
 
 
-class IncidentStatus(StrEnum):
+class IncidentStatus(str, Enum):
     open = "open"
     investigating = "investigating"
     diagnosed = "diagnosed"
@@ -45,7 +47,7 @@ class Incident(BaseModel):
     affected_services: list[str]
     evidence: list[Evidence]
     investigation_steps: list[dict] = Field(default_factory=list)
-    diagnosis: dict | None = None
+    diagnosis: Optional[dict] = None
 
 
 class ApprovalRequest(BaseModel):
@@ -56,4 +58,3 @@ class ApprovalRequest(BaseModel):
 
 class ExecuteRequest(BaseModel):
     approval_id: str
-

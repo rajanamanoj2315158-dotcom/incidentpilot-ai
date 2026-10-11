@@ -1,6 +1,7 @@
+from __future__ import annotations
 import asyncio
 import json
-from typing import Protocol
+from typing import Optional, Protocol
 import httpx
 from pydantic import BaseModel, ValidationError
 from .config import settings
@@ -11,9 +12,9 @@ class LLMError(Exception): pass
 
 class AgentDecision(BaseModel):
     action: str
-    tool: str | None = None
+    tool: Optional[str] = None
     rationale: str
-    hypothesis: str | None = None
+    hypothesis: Optional[str] = None
 
 
 class LLM(Protocol):

@@ -1,5 +1,7 @@
+from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from typing import Optional
 from uuid import uuid4
 from fastapi import Depends, FastAPI, Header, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse
@@ -12,7 +14,7 @@ from .store import Store
 app = FastAPI(title="IncidentPilot AI", version="0.1.0")
 store = Store()
 
-def require_operator(x_role: str | None = Header(default=None), x_operator_token: str | None = Header(default=None)):
+def require_operator(x_role: Optional[str] = Header(default=None), x_operator_token: Optional[str] = Header(default=None)):
     if x_role not in {"operator", "admin"}:
         raise HTTPException(403, "Operator role required")
     if settings.operator_token and x_operator_token != settings.operator_token:
@@ -32,7 +34,7 @@ def integrations():
     return {"sarvam": {"configured": bool(settings.sarvam_api_key), "model": settings.sarvam_model, "mode":"live" if settings.sarvam_api_key else "not_configured"}, "prometheus":{"configured":False}, "github":{"configured":False}, "evidence_mode":"synthetic when no provider adapter is configured"}
 
 @app.get("/api/v1/incidents")
-def list_incidents(q: str | None = None, limit: int = Query(50, le=100)):
+def list_incidents(q: Optional[str] = None, limit: int = Query(50, le=100)):
     items = store.incidents()
     if q: items = [i for i in items if q.lower() in (i.title + i.description).lower()]
     return {"items": [i.model_dump(mode="json") for i in items[:limit]], "total": len(items)}
