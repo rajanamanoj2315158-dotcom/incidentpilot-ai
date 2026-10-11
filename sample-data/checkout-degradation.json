@@ -1,0 +1,11 @@
+{
+  "title": "Synthetic checkout error-rate increase",
+  "description": "Demonstration evidence only; no real customer impact is asserted.",
+  "severity": "high",
+  "affected_services": ["checkout"],
+  "evidence": [
+    {"id":"alert-001","kind":"alert","timestamp":"2026-10-11T09:00:00Z","service":"checkout","summary":"5xx rate crossed configured threshold","source":"synthetic"},
+    {"id":"deploy-001","kind":"deployment","timestamp":"2026-10-11T08:57:00Z","service":"checkout","summary":"Version 2026.10.11.2 deployed to staging","source":"synthetic"},
+    {"id":"trace-001","kind":"trace","timestamp":"2026-10-11T09:01:00Z","service":"checkout","summary":"Payment dependency spans returned errors","source":"synthetic"}
+  ]
+}
